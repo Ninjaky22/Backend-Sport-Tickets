@@ -16,20 +16,23 @@ public class RentaController {
     @Autowired
     private RentaRepository rentaRepository;
 
-    // Obtener las rentas de un usuario específico
+    // Método para crear una renta (el que usa el Carrito)
+    @PostMapping
+    public Renta crearRenta(@RequestBody Renta nuevaRenta) {
+        nuevaRenta.setFechaRenta(LocalDate.now().toString());
+        nuevaRenta.setEstado("Activo");
+        return rentaRepository.save(nuevaRenta);
+    }
+
+    // Método para ver las rentas de un solo usuario (El que usa "Mis Rentas")
     @GetMapping("/usuario/{email}")
-    public List<Renta> obtenerRentasDeUsuario(@PathVariable String email) {
+    public List<Renta> obtenerRentasPorUsuario(@PathVariable String email) {
         return rentaRepository.findByUsuarioEmail(email);
     }
 
-    // Crear una nueva renta (Cuando le den "Pagar" en el carrito)
-    @PostMapping
-    public Renta crearRenta(@RequestBody Renta nuevaRenta) {
-        // Le asignamos la fecha exacta del servidor
-        nuevaRenta.setFechaRenta(LocalDate.now().toString());
-        // Por defecto, toda renta nueva nace "Activa"
-        nuevaRenta.setEstado("Activa");
-
-        return rentaRepository.save(nuevaRenta);
+    // ¡NUEVO MÉTODO PARA EL ERROR 405! (El que usa el Dashboard de Administrador)
+    @GetMapping
+    public List<Renta> obtenerTodasLasRentas() {
+        return rentaRepository.findAll();
     }
 }

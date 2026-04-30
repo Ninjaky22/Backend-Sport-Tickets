@@ -17,10 +17,16 @@ public class Usuario {
 
     private String password;
 
-    // AQUÍ ESTÁ EL CAMBIO A BOOLEANO
     private Boolean superUser;
 
-    public Usuario() {}
+    private String telefono;
+
+    // AQUÍ ESTÁ LA MAGIA: Obligamos a Hibernate a respetar el tamaño texto infinito
+    @Column(columnDefinition = "TEXT")
+    private String fotoUrl;
+
+    public Usuario() {
+    }
 
     // --- GETTERS Y SETTERS ---
     public Long getId() { return id; }
@@ -35,7 +41,12 @@ public class Usuario {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    // En los booleanos, el "get" suele llamarse "is"
     public Boolean getSuperUser() { return superUser; }
     public void setSuperUser(Boolean superUser) { this.superUser = superUser; }
+
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
+
+    public String getFotoUrl() { return fotoUrl; }
+    public void setFotoUrl(String fotoUrl) { this.fotoUrl = fotoUrl; }
 }
