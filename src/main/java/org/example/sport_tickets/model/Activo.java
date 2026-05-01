@@ -2,28 +2,27 @@ package org.example.sport_tickets.model;
 
 import jakarta.persistence.*;
 
-@Entity // Le dice a Java que esta clase es una tabla de la base de datos
-@Table(name = "activos") // Nombre de la tabla en Postgres
+@Entity
+@Table(name = "activos")
 public class Activo {
 
-    @Id // Define que este campo es la Llave Primaria (el ID único)
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Hace que el ID sea 1, 2, 3... automático
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nombre;
     private String categoria;
-    private Double precioDia; // Usamos Double para precios con decimales si es necesario
-    private Integer stock;
-    private String condicion; // "Nuevo", "Usado", "Mantenimiento"
-    private String imagenUrl; // Por si luego queremos poner fotos reales
+    private Double precioDia;
 
-    // --- CONSTRUCTORES (Para crear objetos vacíos o con datos) ---
-    public Activo() {
-    }
+    // NUEVO: Para saber cuántos tenemos en total en bodega
+    private Integer cantidadTotal;
 
-    // --- GETTERS Y SETTERS (Las puertas para leer y escribir los datos) ---
-    // Los hacemos a mano para que los puedas mostrar en tu sustentación
+    @Column(columnDefinition = "TEXT")
+    private String imagenUrl;
 
+    public Activo() {}
+
+    // GETTERS Y SETTERS
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -36,11 +35,8 @@ public class Activo {
     public Double getPrecioDia() { return precioDia; }
     public void setPrecioDia(Double precioDia) { this.precioDia = precioDia; }
 
-    public Integer getStock() { return stock; }
-    public void setStock(Integer stock) { this.stock = stock; }
-
-    public String getCondicion() { return condicion; }
-    public void setCondicion(String condicion) { this.condicion = condicion; }
+    public Integer getCantidadTotal() { return cantidadTotal; }
+    public void setCantidadTotal(Integer cantidadTotal) { this.cantidadTotal = cantidadTotal; }
 
     public String getImagenUrl() { return imagenUrl; }
     public void setImagenUrl(String imagenUrl) { this.imagenUrl = imagenUrl; }

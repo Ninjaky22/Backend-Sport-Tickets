@@ -12,11 +12,15 @@ public class Renta {
 
     private String usuarioEmail; // El "dueño" de la renta
     private String articuloNombre; // Qué rentó
+
+    // AQUÍ ESTÁ LA CORRECCIÓN: Le decimos a la base de datos que este texto es gigante (Base64)
+    @Column(columnDefinition = "TEXT")
     private String imagenUrl; // Para mostrar la fotito en la lista
+
     private Integer dias;
     private Double totalPagado;
     private String fechaRenta;
-    private String estado; // Puede ser "Activa" o "Devuelto"
+    private String estado; // Puede ser "Pendiente", "Aceptado", "Denegado", "Devuelto"
 
     public Renta() {
     }

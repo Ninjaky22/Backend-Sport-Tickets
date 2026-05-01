@@ -1,9 +1,11 @@
 package org.example.sport_tickets.controller;
 
 import org.example.sport_tickets.model.Usuario;
-import org.example.sport_tickets.repository.UsuarioRepository;
+import org.example.sport_tickets.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -11,53 +13,26 @@ import org.springframework.web.bind.annotation.*;
 public class UsuarioController {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UsuarioService usuarioService;
 
     @PostMapping("/registro")
     public String registrarUsuario(@RequestBody Usuario nuevoUsuario) {
-        Usuario usuarioExistente = usuarioRepository.findByEmail(nuevoUsuario.getEmail());
-        if (usuarioExistente != null) {
-            return "Error: El correo ya está registrado";
-        }
-        nuevoUsuario.setSuperUser(false);
-        usuarioRepository.save(nuevoUsuario);
-        return "Registro exitoso";
+        return usuarioService.registrarUsuario(nuevoUsuario);
     }
 
     @PostMapping("/login")
     public Usuario iniciarSesion(@RequestBody Usuario intentoLogin) {
-        Usuario usuarioDB = usuarioRepository.findByEmail(intentoLogin.getEmail());
-        if (usuarioDB != null && usuarioDB.getPassword().equals(intentoLogin.getPassword())) {
-            return usuarioDB;
-        }
-        return null;
+        return usuarioService.iniciarSesion(intentoLogin);
     }
 
-    @PutMapping("/actualizar")
-    public Usuario actualizarUsuario(@RequestBody Usuario usuarioActualizado) {
+    // Ruta corregida a /{id} para que encaje perfectamente con el Frontend
+    @PutMapping("/{id}")
+    public Usuario actualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuarioActualizado) {
+        return usuarioService.actualizarUsuario(id, usuarioActualizado);
+    }
 
-        // ESCUDO CONTRA EL ERROR 500: Si el ID es nulo, no hacemos la búsqueda
-        if (usuarioActualizado.getId() == null) {
-            return null;
-        }
-
-        Usuario usuarioDB = usuarioRepository.findById(usuarioActualizado.getId()).orElse(null);
-
-        if (usuarioDB != null) {
-            usuarioDB.setNombreCompleto(usuarioActualizado.getNombreCompleto());
-            usuarioDB.setTelefono(usuarioActualizado.getTelefono());
-            usuarioDB.setEmail(usuarioActualizado.getEmail());
-
-            if (usuarioActualizado.getFotoUrl() != null) {
-                usuarioDB.setFotoUrl(usuarioActualizado.getFotoUrl());
-            }
-
-            if (usuarioActualizado.getPassword() != null && !usuarioActualizado.getPassword().isEmpty()) {
-                usuarioDB.setPassword(usuarioActualizado.getPassword());
-            }
-
-            return usuarioRepository.save(usuarioDB);
-        }
-        return null;
+    @GetMapping
+    public List<Usuario> obtenerTodosLosUsuarios() {
+        return usuarioService.obtenerTodosLosUsuarios();
     }
 }

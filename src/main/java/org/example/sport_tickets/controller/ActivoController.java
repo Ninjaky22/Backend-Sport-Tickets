@@ -1,29 +1,37 @@
 package org.example.sport_tickets.controller;
 
 import org.example.sport_tickets.model.Activo;
-import org.example.sport_tickets.repository.ActivoRepository;
+import org.example.sport_tickets.service.ActivoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
-@RestController // Le dice a Java que esta clase va a responder peticiones de internet
-@RequestMapping("/api/activos") // La URL por donde el mesero atiende
-@CrossOrigin(origins = "*") // Permite que tu HTML se conecte sin problemas de seguridad
+@RestController
+@RequestMapping("/api/activos")
+@CrossOrigin(origins = "*")
 public class ActivoController {
 
+    // Ya no inyectamos el Repository, inyectamos el Service
     @Autowired
-    private ActivoRepository activoRepository; // Llamamos a nuestro "cocinero"
+    private ActivoService activoService;
 
-    // Método para OBTENER todos los activos (GET)
     @GetMapping
-    public List<Activo> listarActivos() {
-        return activoRepository.findAll(); // Va a la base de datos y trae todo
+    public List<Activo> listarTodos() {
+        return activoService.obtenerTodos();
     }
 
-    // Método para GUARDAR un nuevo activo (POST)
     @PostMapping
-    public Activo crearActivo(@RequestBody Activo nuevoActivo) {
-        return activoRepository.save(nuevoActivo); // Guarda el objeto en la base de datos
+    public Activo crearActivo(@RequestBody Activo activo) {
+        return activoService.guardarNuevo(activo);
+    }
+
+    @PutMapping("/{id}")
+    public Activo actualizarActivo(@PathVariable Long id, @RequestBody Activo activo) {
+        return activoService.actualizarActivo(id, activo);
+    }
+
+    @DeleteMapping("/{id}")
+    public void eliminarActivo(@PathVariable Long id) {
+        activoService.eliminarActivo(id);
     }
 }
