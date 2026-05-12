@@ -15,9 +15,23 @@ public class RentaController {
     @Autowired
     private RentaService rentaService;
 
+    // Clase interna DTO para recibir los datos desde el frontend fácilmente
+    public static class RentaRequest {
+        private Long usuarioId;
+        private Long activoId;
+        private Integer dias;
+
+        public Long getUsuarioId() { return usuarioId; }
+        public void setUsuarioId(Long usuarioId) { this.usuarioId = usuarioId; }
+        public Long getActivoId() { return activoId; }
+        public void setActivoId(Long activoId) { this.activoId = activoId; }
+        public Integer getDias() { return dias; }
+        public void setDias(Integer dias) { this.dias = dias; }
+    }
+
     @PostMapping
-    public Renta crearRenta(@RequestBody Renta nuevaRenta) {
-        return rentaService.crearRenta(nuevaRenta);
+    public Renta crearRenta(@RequestBody RentaRequest request) {
+        return rentaService.crearRenta(request.getUsuarioId(), request.getActivoId(), request.getDias());
     }
 
     @GetMapping("/usuario/{email}")

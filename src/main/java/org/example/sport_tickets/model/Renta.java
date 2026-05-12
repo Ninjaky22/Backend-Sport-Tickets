@@ -10,17 +10,22 @@ public class Renta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String usuarioEmail; // El "dueño" de la renta
-    private String articuloNombre; // Qué rentó
+    // RELACIÓN: Una renta pertenece a un usuario específico.
+    // Sustituye al campo 'usuarioEmail' porque ya tenemos acceso a todo el objeto Usuario.
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
 
-    // AQUÍ ESTÁ LA CORRECCIÓN: Le decimos a la base de datos que este texto es gigante (Base64)
-    @Column(columnDefinition = "TEXT")
-    private String imagenUrl; // Para mostrar la fotito en la lista
+    // RELACIÓN: Una renta está vinculada a un activo (artículo).
+    // Sustituye a 'articuloNombre' e 'imagenUrl'.
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "activo_id", nullable = false)
+    private Activo activo;
 
     private Integer dias;
     private Double totalPagado;
     private String fechaRenta;
-    private String estado; // Puede ser "Pendiente", "Aceptado", "Denegado", "Devuelto"
+    private String estado; // "Pendiente", "Aceptado", "Denegado", "Devuelto"
 
     public Renta() {
     }
@@ -29,14 +34,11 @@ public class Renta {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getUsuarioEmail() { return usuarioEmail; }
-    public void setUsuarioEmail(String usuarioEmail) { this.usuarioEmail = usuarioEmail; }
+    public Usuario getUsuario() { return usuario; }
+    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
 
-    public String getArticuloNombre() { return articuloNombre; }
-    public void setArticuloNombre(String articuloNombre) { this.articuloNombre = articuloNombre; }
-
-    public String getImagenUrl() { return imagenUrl; }
-    public void setImagenUrl(String imagenUrl) { this.imagenUrl = imagenUrl; }
+    public Activo getActivo() { return activo; }
+    public void setActivo(Activo activo) { this.activo = activo; }
 
     public Integer getDias() { return dias; }
     public void setDias(Integer dias) { this.dias = dias; }

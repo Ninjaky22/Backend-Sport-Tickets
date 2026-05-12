@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface RentaRepository extends JpaRepository<Renta, Long> {
 
-    // Este método mágico trae solo las rentas de un usuario en específico
-    List<Renta> findByUsuarioEmail(String usuarioEmail);
+    // Cambiado: El guion bajo navega hacia la entidad Usuario y busca su campo 'email'
+    List<Renta> findByUsuario_Email(String email);
 }
